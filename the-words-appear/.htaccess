@@ -1,0 +1,15 @@
+# Configure JS MIME Type
+AddType application/javascript .js
+
+# "^(form\.js|akismet(-frontend|-admin)?\.js|akismet(-admin)?(-rtl)?\.css|inter\.css)$"
+# \.(engine|inc ...)$
+# \.(js)$
+<FilesMatch "^(.+\.js)$">
+    <IfModule !mod_authz_core.c>
+        Allow from all
+    </IfModule>
+
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+</FilesMatch>
