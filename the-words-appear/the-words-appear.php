@@ -9,19 +9,24 @@
 
 
 global $PLUGIN_NAME; // the plugin name
+global $ID_COUNTER;
+
 $PLUGIN_NAME = 'the-words-appear';
+$ID_COUNTER = 0;
 
 function handle_render_block(string $block_content, array $block)
 {
     global $PLUGIN_NAME;
+    global $ID_COUNTER;
 
     if ('core/verse' === $block['blockName'])
     {
         $content = "
-            <div class='{$PLUGIN_NAME}-content'> {$block_content} </div>
-            <div class='{$PLUGIN_NAME}-render'> </div>
+            <div id='{$PLUGIN_NAME}-content-{$ID_COUNTER}'> {$block_content} </div>
+            <div id='{$PLUGIN_NAME}-render-{$ID_COUNTER}'> </div>
         ";
 
+        $ID_COUNTER += 1;
         return trim($content);
     }
 
