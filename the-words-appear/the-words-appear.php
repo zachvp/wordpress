@@ -8,16 +8,21 @@
  */
 
 
-global $NAME; // the plugin name
-$NAME = 'the-words-appear';
+global $PLUGIN_NAME; // the plugin name
+$PLUGIN_NAME = 'the-words-appear';
 
 function handle_render_block(string $block_content, array $block)
 {
-    global $NAME;
+    global $PLUGIN_NAME;
 
     if ('core/verse' === $block['blockName'])
     {
-        return "<div class='{$NAME}'>{$block_content}</div>";
+        $content = "
+            <div class='{$PLUGIN_NAME}-content'> {$block_content} </div>
+            <div class='{$PLUGIN_NAME}-render'> </div>
+        ";
+
+        return trim($content);
     }
 
     return $block_content;
@@ -30,12 +35,12 @@ function handle_enqueue_scripts()
 {
     // wp_enqueue_style( 'the-words-appear-style', plugins_url('style.css', __FILE__) );
     // wp_enqueue_style( 'the-words-appear-script', plugins_url( 'script.js', __FILE__ ));
-    wp_register_script('script', plugins_url( 'script.js', __FILE__ ));
-    wp_enqueue_script( 'the-words-appear-script', plugins_url( 'script.js', __FILE__ ));
-    
-    // wp_enqueue_style( 'style',  plugin_dir_url( __FILE__ ) . '/style.css' );
+    $script_path = plugins_url( 'script.js', __FILE__ );
+
+    wp_register_script('script', $script_path, array('jquery'));
+    wp_enqueue_script('script');
 }
 
-add_action( 'wp_enqueue_scripts', 'handle_enqueue_scripts' );
+add_action('wp_enqueue_scripts', 'handle_enqueue_scripts');
 
 ?>
