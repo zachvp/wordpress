@@ -14,7 +14,6 @@ console.log('ZVP: sanity check: script load');
         let divRenderList = [];
 
         /** functions */
-        // let loop = true;
         while (true) {
             let divContentID = `${PLUGIN_NAME}-content-${divIndex}`;
             let divRenderID  = `${PLUGIN_NAME}-render-${divIndex}`;
@@ -36,30 +35,42 @@ console.log('ZVP: sanity check: script load');
             // log(`previousH2: ${JSON.stringify(previousH2, null, 2)}`);
 
             // handle main content title click
-            previousH2.click(function(event) {
+            let mode = 0;
+            previousH2.click(function() {
                 log('handle click');
 
                 // log(`div content: ${JSON.stringify(divContent.text(), null, 2)}`);
-                let intervalID = 0;
-                let renderContent = '';
+                let initialDivContent = divContentList[divLoopIndex].clone();
 
-                /** main script */
-                let words = divContentList[divLoopIndex].html().split('');
-                let wordIndex = 0;
+                switch(mode) {
+                    case 0:
+                        let intervalID = 0;
+                        let renderContent = '';
+                        let words = divContentList[divLoopIndex].html().split('');
+                        let wordIndex = 0;
+                        divContentList[divLoopIndex].html('');
+                        // render the words at the given speed
+                        intervalId = setInterval(function() {
+                            if (wordIndex < words.length) {
+                                renderContent += words[wordIndex];
+                                divRenderList[divLoopIndex].html(renderContent);
+                            } else {
+                                clearInterval(intervalID);
+                            }
+                            wordIndex += 1;
+                        },
+                        50); // in MS
+                        break;
+                    case 1:
+                        divContentList[divLoopIndex].html(initialDivContent.html());
+                        divRenderList[divLoopIndex].html('');
+                        break;
+                }
 
-                divContentList[divLoopIndex].html('');
-                // render the words at the given speed
-                intervalId = setInterval(function() {
-                    if (wordIndex < words.length) {
-                        renderContent += words[wordIndex];
-                        divRenderList[divLoopIndex].html(renderContent);
-                    } else {
-                        clearInterval(intervalID);
-                    }
-                    wordIndex += 1;
-                },
-                50); // in MS
-                // log(JSON.stringify(words, null, 2));
+                mode += 1;
+                if (mode > 1) {
+                    mode = 0;
+                }
             });
 
             divIndex += 1;
