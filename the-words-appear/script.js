@@ -36,21 +36,21 @@ console.log('ZVP: sanity check: script load');
 
             // handle main content title click
             let mode = 0;
+            let intervalID = 0;
+            let initialDivContent = divContentList[divLoopIndex].html();
             previousH2.click(function() {
                 log('handle click');
 
                 // log(`div content: ${JSON.stringify(divContent.text(), null, 2)}`);
-                let initialDivContent = divContentList[divLoopIndex].clone();
-
                 switch(mode) {
                     case 0:
-                        let intervalID = 0;
+                        log('render words');
                         let renderContent = '';
-                        let words = divContentList[divLoopIndex].html().split('');
+                        let words = initialDivContent.split('');
                         let wordIndex = 0;
                         divContentList[divLoopIndex].html('');
                         // render the words at the given speed
-                        intervalId = setInterval(function() {
+                        intervalID = setInterval(function() {
                             if (wordIndex < words.length) {
                                 renderContent += words[wordIndex];
                                 divRenderList[divLoopIndex].html(renderContent);
@@ -62,7 +62,9 @@ console.log('ZVP: sanity check: script load');
                         50); // in MS
                         break;
                     case 1:
-                        divContentList[divLoopIndex].html(initialDivContent.html());
+                        log('reset content');
+                        clearInterval(intervalID);
+                        divContentList[divLoopIndex].html(initialDivContent);
                         divRenderList[divLoopIndex].html('');
                         break;
                 }
