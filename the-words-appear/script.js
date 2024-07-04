@@ -67,10 +67,16 @@ console.log('ZVP: sanity check: script load');
                         divContentList[divLoopIndex].html(initialDivContent);
                         divRenderList[divLoopIndex].html('');
                         break;
+                    case 2:
+                        log('clear content');
+                        clearInterval(intervalID);
+                        divContentList[divLoopIndex].html('');
+                        divRenderList[divLoopIndex].html('');
+                        break;
                 }
 
                 mode += 1;
-                if (mode > 1) {
+                if (mode > 2) {
                     mode = 0;
                 }
             });
